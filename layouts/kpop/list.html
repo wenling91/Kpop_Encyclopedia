@@ -1,0 +1,133 @@
+{{ define "main" }}
+
+<h1>KPOP 資料庫</h1>
+
+<input 
+  type="text" 
+  id="searchInput" 
+  placeholder="搜尋團體名稱..." 
+  style="width: 50%; padding: 8px; margin-bottom: 15px; font-size: 16px;"
+/>
+
+<div id="sheetData">資料讀取中...</div>
+
+<script>
+const sheetURL = "https://docs.google.com/spreadsheets/d/1Aiw6BhSJS9Fou5XIUN0BoqZM7ymDSJTtAcNJi7GTyqE/gviz/tq?tqx=out:json&sheet=KPOP";
+
+// 要顯示的欄位
+const allowedCols = ["團體", "性別", "出道日期", "官方粉絲名"];
+
+// Google Sheet 中 wiki 連結欄位名稱
+const wikiColName = "Wiki Link";
+
+// 全部資料列（搜尋用）
+let allRows = [];
+let cols = [];
+let allowedIndexes = [];
+let wikiIndex = -1;
+
+// 日期格式化（你可以自行調整格式）
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+
+  // 處理 gviz 的 Date(YYYY,MM,DD) 格式
+  const match = dateStr.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+  if (match) {
+    const year = match[1];
+    const month = String(Number(match[2]) + 1).padStart(2, "0"); // Google 的月份是 0-based
+    const day = String(match[3]).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  }
+
+  // 如果不是 gviz 日期格式， fallback 成一般格式
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+
+  return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
+}
+
+
+fetch(sheetURL)
+  .then(r => r.text())
+  .then(text => {
+    const jsonText = text.replace(/^[^({]*\(/, "").replace(/\);?$/, "");
+    const data = JSON.parse(jsonText);
+
+    // 所有欄位名稱
+    cols = data.table.cols.map(c => c.label);
+
+    // 找出顯示欄位的 index
+    allowedIndexes = allowedCols.map(name => cols.indexOf(name)).filter(i => i !== -1);
+
+    // wiki 欄位 index
+    wikiIndex = cols.indexOf(wikiColName);
+
+    // 取出所有列
+    allRows = data.table.rows.map(r =>
+      r.c.map(c => (c && c.v ? c.v : ""))
+    );
+
+    renderTable(allRows);
+  });
+
+function renderTable(rows) {
+  let html = "<table><tr>";
+  allowedCols.forEach(c => html += `<th>${c}</th>`);
+  html += "</tr>";
+
+  rows.forEach(row => {
+    html += "<tr>";
+
+    allowedIndexes.forEach((colIndex, i) => {
+      let cell = row[colIndex];
+
+      // 出道日期美化（只針對出道日期欄位）
+      if (allowedCols[i] === "出道日期") {
+        cell = formatDate(cell);
+      }
+
+      // 團體 → 加 wiki link
+      if (allowedCols[i] === "團體") {
+        const wikiURL = row[wikiIndex] || "#";
+        html += `<td><a href="${wikiURL}" target="_blank">${cell}</a></td>`;
+      } else {
+        html += `<td>${cell}</td>`;
+      }
+    });
+
+    html += "</tr>";
+  });
+
+  html += "</table>";
+  document.getElementById("sheetData").innerHTML = html;
+}
+
+// 🔍 搜尋（自動依照 allowedIndexes & wikiIndex）
+document.getElementById("searchInput").addEventListener("input", function () {
+  const keyword = this.value.toLowerCase();
+
+  const filtered = allRows.filter(row => {
+    const groupIndex = cols.indexOf("團體");
+    const groupName = row[groupIndex] ? row[groupIndex].toLowerCase() : "";
+    return groupName.includes(keyword);
+  });
+
+  renderTable(filtered);
+});
+</script>
+
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+</style>
+
+{{ end }}
