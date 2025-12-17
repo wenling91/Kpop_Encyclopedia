@@ -7,4 +7,4 @@ menu:
 ---
 
 
-- [email]("mailto:ce574357@gmail.com")
+- email: ce574357@gmail.com
