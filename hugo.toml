@@ -1,0 +1,4 @@
+baseURL = 'https://wenling91.github.io/Kpop_Encyclopedia/'
+languageCode = 'zh-tw'
+title = 'Kpop Encyclopedia'
+theme = "PaperMod"
