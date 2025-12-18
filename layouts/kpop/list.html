@@ -21,7 +21,7 @@
 const sheetURL = "https://docs.google.com/spreadsheets/d/1Aiw6BhSJS9Fou5XIUN0BoqZM7ymDSJTtAcNJi7GTyqE/gviz/tq?tqx=out:json&sheet=KPOP";
 
 // 要顯示的欄位
-const allowedCols = ["團體", "性別", "出道日期", "官方粉絲名"];
+const allowedCols = ["團體", "出道日期", "官方粉絲名", "現任成員"];
 
 // Google Sheet 中 wiki 連結欄位名稱
 const wikiColName = "Wiki Link";
@@ -212,7 +212,7 @@ clearBtn.addEventListener("click", function () {
 
 /* 表格樣式 */
 .table-wrapper {
-  max-height: 500px;
+  max-height: 600px;
   overflow-y: auto;
   overflow-x: auto;
   position: relative;
@@ -241,7 +241,8 @@ thead {
 }
 
 th {
-  background: #dedede;
+  background: white;
+  color: black;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
