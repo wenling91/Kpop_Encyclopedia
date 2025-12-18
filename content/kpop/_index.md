@@ -1,9 +1,3 @@
 ---
-title: "KPOP 資料庫"
-menu:
-  main:
-    parent: "Home"
-    weight: 2
+title: "KPOP 團體列表"
 ---
-
-

@@ -1,13 +1,19 @@
 {{ define "main" }}
 
-
-
-<input 
-  type="text" 
-  id="searchInput" 
-  placeholder="搜尋團體名稱..." 
-  style="width: 50%; padding: 8px; margin-bottom: 15px; font-size: 16px;"
-/>
+<div class="search-container">
+  <div class="search-box">
+    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="搜尋團體名稱..."
+    />
+    <button id="clearBtn" class="clear-btn" style="display: none;">✕</button>
+  </div>
+</div>
 
 <div id="sheetData">資料讀取中...</div>
 
@@ -71,9 +77,13 @@ fetch(sheetURL)
   });
 
 function renderTable(rows) {
-  let html = "<table><tr>";
-  allowedCols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr>";
+  let html = '<div class="table-wrapper">';
+  html += '<table><thead><tr>';
+  
+  allowedCols.forEach(c => {
+    html += `<th>${c}</th>`;
+  });
+  html += "</tr></thead><tbody>";
 
   rows.forEach(row => {
     html += "<tr>";
@@ -86,10 +96,12 @@ function renderTable(rows) {
         cell = formatDate(cell);
       }
 
-      // 團體 → 加 wiki link
+      // 團體 → 加內部頁面 link (使用相對路徑)
       if (allowedCols[i] === "團體") {
-        const wikiURL = row[wikiIndex] || "#";
-        html += `<td><a href="${wikiURL}" target="_blank">${cell}</a></td>`;
+        // 將團體名稱轉換為 URL slug（移除空格、轉小寫）
+        const slug = cell.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
+        const basePath = window.location.pathname.split('/kpop')[0];
+        html += `<td><a href="${basePath}/kpop/group/?name=${encodeURIComponent(slug)}">${cell}</a></td>`;
       } else {
         html += `<td>${cell}</td>`;
       }
@@ -98,13 +110,19 @@ function renderTable(rows) {
     html += "</tr>";
   });
 
-  html += "</table>";
+  html += "</tbody></table></div>";
   document.getElementById("sheetData").innerHTML = html;
 }
 
-// 🔍 搜尋（自動依照 allowedIndexes & wikiIndex）
-document.getElementById("searchInput").addEventListener("input", function () {
+// 🔍 搜尋功能
+const searchInput = document.getElementById("searchInput");
+const clearBtn = document.getElementById("clearBtn");
+
+searchInput.addEventListener("input", function () {
   const keyword = this.value.toLowerCase();
+  
+  // 顯示/隱藏清除按鈕
+  clearBtn.style.display = keyword ? "block" : "none";
 
   const filtered = allRows.filter(row => {
     const groupIndex = cols.indexOf("團體");
@@ -114,19 +132,132 @@ document.getElementById("searchInput").addEventListener("input", function () {
 
   renderTable(filtered);
 });
+
+// 清除搜尋
+clearBtn.addEventListener("click", function () {
+  searchInput.value = "";
+  clearBtn.style.display = "none";
+  renderTable(allRows);
+  searchInput.focus();
+});
 </script>
 
 <style>
+/* 搜尋容器 */
+.search-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #999;
+  pointer-events: none;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 12px 40px 12px 40px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 24px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+#searchInput:focus {
+  border-color: #4a90e2;
+  background: white;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.15);
+}
+
+#searchInput::placeholder {
+  color: #aaa;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 12px;
+  background: #ddd;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.clear-btn:hover {
+  background: #ccc;
+  color: #333;
+}
+
+/* 表格樣式 */
+.table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
-  display: block;
-  overflow-x: auto;
   white-space: nowrap;
+  table-layout: fixed;
 }
+
 th, td {
   border: 1px solid #ccc;
   padding: 8px;
+  text-align: left;
+}
+
+/* 凍結標題列 */
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+th {
+  background: #dedede;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+td {
+  background: inherit;
+}
+
+/* 連結樣式 */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style>
 

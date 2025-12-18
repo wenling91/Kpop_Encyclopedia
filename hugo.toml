@@ -13,7 +13,7 @@ Content = """
 
 [[params.socialIcons]]
 name = "email"
-url = "ce574357@gmail.com"
+url = "mailto:ce574357@gmail.com"
 
 [[params.socialIcons]]
 name = "instagram"
@@ -21,10 +21,10 @@ url = "https://instagram.com/wen0__"
 
 [menu]
   [[menu.main]]
-    weight = 1
     name = "Home"
     url = "/"
+    weight = 1
   [[menu.main]]
-    weight = 2
     name = "KPOP"
     url = "/kpop/"
+    weight = 2
