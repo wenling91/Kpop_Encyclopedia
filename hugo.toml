@@ -3,6 +3,13 @@ languageCode = 'zh-tw'
 title = 'KPOP 百科全書'
 theme = "PaperMod"
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[params]
+  mainSections = ["posts", "blog"]  # 不包含 kpop
+
 [params.homeInfoParams]
 Title = "歡迎來到 KPOP 百科全書👋"
 Content = """

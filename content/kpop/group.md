@@ -1,4 +1,5 @@
 ---
 title: "KPOP 團體資訊"
-headless: true
+draft: false
+layout: single
 ---
