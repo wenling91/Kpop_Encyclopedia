@@ -27,7 +27,6 @@
 
     <div class="form-group">
       <label for="contact">聯絡方式（選填）</label>
-      <small class="form-hint">格式範例："example@email.com"、"instagram：abc"</small>
       <input type="text" id="contact" name="contact" placeholder="Email 或其他聯絡方式（如需得到回覆請填寫）">
     </div>
 
@@ -122,11 +121,10 @@ form.addEventListener('submit', function(e) {
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #333;
 }
 
 .report-description {
-  color: #666;
+  color: #888;
   margin-bottom: 30px;
   line-height: 1.6;
 }
@@ -164,6 +162,7 @@ form.addEventListener('submit', function(e) {
   transition: border-color 0.3s;
   box-sizing: border-box;
   font-family: inherit;
+  color: black;
 }
 
 .form-group input:focus,
@@ -172,11 +171,13 @@ form.addEventListener('submit', function(e) {
   outline: none;
   border-color: #4a90e2;
   background: white;
+  color: black;
 }
 
 .form-group select {
   cursor: pointer;
   background: white;
+  color: black;
 }
 
 .form-group textarea {
