@@ -19,10 +19,6 @@ Content = """
 """
 
 [[params.socialIcons]]
-name = "email"
-url = "/report/"
-
-[[params.socialIcons]]
 name = "instagram"
 url = "https://instagram.com/wen0__"
 

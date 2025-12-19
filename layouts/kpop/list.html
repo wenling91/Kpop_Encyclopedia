@@ -15,6 +15,10 @@
   </div>
 </div>
 
+<div class="table-description">
+  <p>表格支援欄位排序，點擊「團體名稱」可閱覽團體資訊。</p>
+</div>
+
 <div id="sheetData">資料讀取中...</div>
 
 <script>
@@ -25,7 +29,7 @@ const allowedCols = ["團體", "出道日期", "官方粉絲名", "現役成員"
 
 // 欄位的顯示名稱（自訂標題）
 const colLabels = {
-  "團體": "團體名稱",
+  "團體": "團體/Solo",
   "出道日期": "出道日期",
   "官方粉絲名": "官方粉絲名",
   "現役成員": "現役成員"
@@ -260,6 +264,10 @@ clearBtn.addEventListener("click", function () {
 .clear-btn:hover {
   background: #ccc;
   color: #333;
+}
+
+.table-description {
+  padding: 5px 13px;
 }
 
 .table-wrapper {
