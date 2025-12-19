@@ -13,9 +13,9 @@ theme = "PaperMod"
 [params.homeInfoParams]
 Title = "歡迎來到 KPOP 百科全書👋"
 Content = """
-本網站為個人整理之 K-POP 團體資料庫，作為記錄與查詢用途。\n
-資料主要彙整自維基百科等公開來源。\n
-如有資料錯誤或遺漏，歡迎指正。\n
+• 本網站為個人整理之 K-POP 團體資料庫，作為記錄與查詢用途。\n
+• 資料主要彙整自維基百科等公開來源。\n
+• 如有資料錯誤或遺漏，歡迎指正。\n
 """
 
 [[params.socialIcons]]
@@ -35,3 +35,7 @@ url = "https://instagram.com/wen0__"
     name = "KPOP"
     url = "/kpop/"
     weight = 2
+  [[menu.main]]
+    name = "Report"
+    url = "/report/"
+    weight = 3
