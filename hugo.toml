@@ -24,14 +24,17 @@ url = "https://instagram.com/wen0__"
 
 [menu]
   [[menu.main]]
-    name = "Home"
+    name = "首頁"
+    identifier = "home"
     url = "/"
     weight = 1
   [[menu.main]]
-    name = "KPOP"
+    name = "團體列表"
+    identifier = "kpop"
     url = "/kpop/"
     weight = 2
   [[menu.main]]
-    name = "Report"
+    name = "問題回報"
+    identifier = "report"
     url = "/report/"
     weight = 3
