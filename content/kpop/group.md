@@ -1,5 +1,5 @@
 ---
-title: "KPOP 團體資訊"
+title: "K-POP 團體資訊"
 draft: false
 layout: single
 ---
